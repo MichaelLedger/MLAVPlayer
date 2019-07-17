@@ -7,9 +7,13 @@
 
 #import "MLAVPlayer.h"
 #import <AVFoundation/AVFoundation.h>
-#import "Masonry.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIImage+Extend.h"
+
+#define RGB(r, g, b)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
+#define RGBA(r, g, b, a)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:a]
+#define RGBHEX(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
+#define RGBHEXA(hex,a) [UIColor colorWithRed:((float)(((hex) & 0xFF0000) >> 16))/255.0 green:((float)(((hex) & 0xFF00)>>8))/255.0 blue: ((float)((hex) & 0xFF))/255.0 alpha:(a)]
 
 static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContext;
 
@@ -62,7 +66,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 }
 
 - (void)dealloc {
-    DLOG_METHOD
     [self pause];
     [self.player removeTimeObserver:self.playbackTimeObserver];
     [self.player removeObserver:self forKeyPath:@"timeControlStatus"];
@@ -93,7 +96,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     _voiceCtrlView.hidden = YES;
     _lightCtrlView.hidden = YES;
     
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"scanreadplayer" ofType:@"bundle"];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"MLAVPlayer" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     [_backBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_support_return@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [_lightBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_support_bright@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
@@ -233,7 +236,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 case AVPlayerItemStatusFailed:
                 {
                     NSError *error = [self.player.currentItem error];
-                    DLOG(@"视频加载失败===%@",error.description);
+                    NSLog(@"视频加载失败===%@",error.description);
                 }
                     break;
             }
@@ -254,11 +257,11 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         if ([keyPath isEqualToString:@"timeControlStatus"]){
             NSInteger playStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
             if (playStatus == 1) {
-                DLOG(@"准备");
+                NSLog(@"准备");
             } else if (playStatus == 2){
-                DLOG(@"播放了");
+                NSLog(@"播放了");
             } else {
-                DLOG(@"暂停了");
+                NSLog(@"暂停了");
             }
         }
     }
@@ -387,7 +390,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
 #pragma mark - Slider Change Method
 - (void)sliderChanging:(UISlider *)sender {
-    DLOG_METHOD
     self.isDragingSlider = YES;
     if (sender == self.timeSlider) {
         [self.player pause];
@@ -405,7 +407,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 }
 
 - (void)sliderChanged:(UISlider *)sender {
-    DLOG_METHOD
     self.isDragingSlider = NO;
 }
 

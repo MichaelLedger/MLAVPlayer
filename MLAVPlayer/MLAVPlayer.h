@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^BackBtnClickBlock)();
+typedef void(^BackBtnClickBlock)(void);
 typedef void(^ScaleBtnClickBlock)(BOOL fullScreen);
 
 @interface MLAVPlayer : UIView
