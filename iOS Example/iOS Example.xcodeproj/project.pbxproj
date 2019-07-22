@@ -3,27 +3,30 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		71B40018D3D82DEB74B83304 /* Pods_iOS_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC02721AE66305EE9C68A8F /* Pods_iOS_Example.framework */; };
 		AA75B29C22DEB7A1000CC8FB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B29B22DEB7A1000CC8FB /* AppDelegate.m */; };
 		AA75B29F22DEB7A1000CC8FB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B29E22DEB7A1000CC8FB /* ViewController.m */; };
 		AA75B2A222DEB7A1000CC8FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2A022DEB7A1000CC8FB /* Main.storyboard */; };
 		AA75B2A422DEB7A2000CC8FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2A322DEB7A2000CC8FB /* Assets.xcassets */; };
 		AA75B2A722DEB7A2000CC8FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2A522DEB7A2000CC8FB /* LaunchScreen.storyboard */; };
 		AA75B2AA22DEB7A2000CC8FB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B2A922DEB7A2000CC8FB /* main.m */; };
-		AA75B2B722DEB7C6000CC8FB /* MLAVPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2B122DEB7C6000CC8FB /* MLAVPlayer.bundle */; };
 		AA75B2B822DEB7C6000CC8FB /* UIImage+Extend.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */; };
 		AA75B2B922DEB7C6000CC8FB /* MLAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */; };
 		AA75B2BD22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2BB22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 */; };
 		AA75B2BE22DEB7D1000CC8FB /* trailer.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2BC22DEB7D1000CC8FB /* trailer.mp4 */; };
-		AAE78F2E22E5A6F60065EC81 /* MLAVPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */; };
-		AAE78F3122E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */; };
+		AAE78F3422E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE78F3322E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.m */; };
+		AAE78F3A22E5BC950065EC81 /* UIViewController+SafeArea.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE78F3922E5BC950065EC81 /* UIViewController+SafeArea.m */; };
+		AAE78F3C22E5C52C0065EC81 /* MLAVPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AAE78F3B22E5C52C0065EC81 /* MLAVPlayer.bundle */; };
 		AAF682E022E30A5E0087046B /* NSBundle+MLAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A0452FF9240407612410FB4 /* Pods-iOS Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.release.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.release.xcconfig"; sourceTree = "<group>"; };
+		86ADB5BDE612271DD4C61053 /* Pods-iOS Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Example.debug.xcconfig"; path = "Target Support Files/Pods-iOS Example/Pods-iOS Example.debug.xcconfig"; sourceTree = "<group>"; };
 		AA75B29722DEB7A1000CC8FB /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA75B29A22DEB7A1000CC8FB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AA75B29B22DEB7A1000CC8FB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -34,18 +37,20 @@
 		AA75B2A622DEB7A2000CC8FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AA75B2A822DEB7A2000CC8FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA75B2A922DEB7A2000CC8FB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		AA75B2B122DEB7C6000CC8FB /* MLAVPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLAVPlayer.bundle; sourceTree = "<group>"; };
 		AA75B2B222DEB7C6000CC8FB /* UIImage+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extend.h"; sourceTree = "<group>"; };
 		AA75B2B322DEB7C6000CC8FB /* MLAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAVPlayer.h; sourceTree = "<group>"; };
 		AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extend.m"; sourceTree = "<group>"; };
 		AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAVPlayer.m; sourceTree = "<group>"; };
 		AA75B2BB22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bbc20190709_21306935GX.mp3; path = ../../bbc20190709_21306935GX.mp3; sourceTree = "<group>"; };
 		AA75B2BC22DEB7D1000CC8FB /* trailer.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = trailer.mp4; path = ../../trailer.mp4; sourceTree = "<group>"; };
-		AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLAVPlayer.xib; sourceTree = "<group>"; };
-		AAE78F2F22E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+SeekSmoothly.h"; sourceTree = "<group>"; };
-		AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+SeekSmoothly.m"; sourceTree = "<group>"; };
+		AAE78F3222E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+SeekSmoothly.h"; sourceTree = "<group>"; };
+		AAE78F3322E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+SeekSmoothly.m"; sourceTree = "<group>"; };
+		AAE78F3822E5BC950065EC81 /* UIViewController+SafeArea.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SafeArea.h"; sourceTree = "<group>"; };
+		AAE78F3922E5BC950065EC81 /* UIViewController+SafeArea.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SafeArea.m"; sourceTree = "<group>"; };
+		AAE78F3B22E5C52C0065EC81 /* MLAVPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MLAVPlayer.bundle; sourceTree = "<group>"; };
 		AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+MLAVPlayer.m"; sourceTree = "<group>"; };
 		AAF682DF22E30A5D0087046B /* NSBundle+MLAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+MLAVPlayer.h"; sourceTree = "<group>"; };
+		DFC02721AE66305EE9C68A8F /* Pods_iOS_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,17 +58,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				71B40018D3D82DEB74B83304 /* Pods_iOS_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E94EC10FDD229BAD24D8014 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DFC02721AE66305EE9C68A8F /* Pods_iOS_Example.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AA75B28E22DEB7A1000CC8FB = {
 			isa = PBXGroup;
 			children = (
 				AA75B29922DEB7A1000CC8FB /* iOS Example */,
 				AA75B29822DEB7A1000CC8FB /* Products */,
+				BBBC45D4281135A9E8120206 /* Pods */,
+				1E94EC10FDD229BAD24D8014 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,19 +113,29 @@
 		AA75B2B022DEB7C6000CC8FB /* MLAVPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				AAE78F3B22E5C52C0065EC81 /* MLAVPlayer.bundle */,
 				AA75B2B322DEB7C6000CC8FB /* MLAVPlayer.h */,
 				AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */,
-				AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */,
-				AA75B2B122DEB7C6000CC8FB /* MLAVPlayer.bundle */,
 				AAF682DF22E30A5D0087046B /* NSBundle+MLAVPlayer.h */,
 				AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */,
 				AA75B2B222DEB7C6000CC8FB /* UIImage+Extend.h */,
 				AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */,
-				AAE78F2F22E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.h */,
-				AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */,
+				AAE78F3222E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.h */,
+				AAE78F3322E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.m */,
+				AAE78F3822E5BC950065EC81 /* UIViewController+SafeArea.h */,
+				AAE78F3922E5BC950065EC81 /* UIViewController+SafeArea.m */,
 			);
 			name = MLAVPlayer;
 			path = ../../MLAVPlayer;
+			sourceTree = "<group>";
+		};
+		BBBC45D4281135A9E8120206 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				86ADB5BDE612271DD4C61053 /* Pods-iOS Example.debug.xcconfig */,
+				4A0452FF9240407612410FB4 /* Pods-iOS Example.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,9 +145,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA75B2AD22DEB7A2000CC8FB /* Build configuration list for PBXNativeTarget "iOS Example" */;
 			buildPhases = (
+				4F09FFF8612B5E51AA79EA1C /* [CP] Check Pods Manifest.lock */,
 				AA75B29322DEB7A1000CC8FB /* Sources */,
 				AA75B29422DEB7A1000CC8FB /* Frameworks */,
 				AA75B29522DEB7A1000CC8FB /* Resources */,
+				F46B186EF8CFFD89EE2B8DF6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,13 +201,54 @@
 				AA75B2BD22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 in Resources */,
 				AA75B2A422DEB7A2000CC8FB /* Assets.xcassets in Resources */,
 				AA75B2BE22DEB7D1000CC8FB /* trailer.mp4 in Resources */,
-				AAE78F2E22E5A6F60065EC81 /* MLAVPlayer.xib in Resources */,
-				AA75B2B722DEB7C6000CC8FB /* MLAVPlayer.bundle in Resources */,
+				AAE78F3C22E5C52C0065EC81 /* MLAVPlayer.bundle in Resources */,
 				AA75B2A222DEB7A1000CC8FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4F09FFF8612B5E51AA79EA1C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iOS Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F46B186EF8CFFD89EE2B8DF6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iOS Example/Pods-iOS Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA75B29322DEB7A1000CC8FB /* Sources */ = {
@@ -188,10 +257,11 @@
 			files = (
 				AA75B29F22DEB7A1000CC8FB /* ViewController.m in Sources */,
 				AA75B2AA22DEB7A2000CC8FB /* main.m in Sources */,
-				AAE78F3122E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */,
+				AAE78F3422E5BC0C0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */,
 				AA75B29C22DEB7A1000CC8FB /* AppDelegate.m in Sources */,
 				AAF682E022E30A5E0087046B /* NSBundle+MLAVPlayer.m in Sources */,
 				AA75B2B922DEB7C6000CC8FB /* MLAVPlayer.m in Sources */,
+				AAE78F3A22E5BC950065EC81 /* UIViewController+SafeArea.m in Sources */,
 				AA75B2B822DEB7C6000CC8FB /* UIImage+Extend.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,6 +402,7 @@
 		};
 		AA75B2AE22DEB7A2000CC8FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86ADB5BDE612271DD4C61053 /* Pods-iOS Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -350,6 +421,7 @@
 		};
 		AA75B2AF22DEB7A2000CC8FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A0452FF9240407612410FB4 /* Pods-iOS Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

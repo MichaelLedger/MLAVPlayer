@@ -22,21 +22,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0zX-LV-gF9">
-                                <rect key="frame" x="141.5" y="552" width="92" height="30"/>
+                                <rect key="frame" x="141.5" y="577" width="92" height="30"/>
                                 <state key="normal" title="播放本地视频"/>
                                 <connections>
                                     <action selector="switchToPlayVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kMi-LB-h9B"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BMO-0m-eWC">
-                                <rect key="frame" x="141.5" y="607" width="92" height="30"/>
+                                <rect key="frame" x="141.5" y="617" width="92" height="30"/>
                                 <state key="normal" title="播放本地音频"/>
                                 <connections>
                                     <action selector="switchToPlayAudio:" destination="BYZ-38-t0r" eventType="touchUpInside" id="n0k-7G-wHL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="crU-Mv-Gct">
-                                <rect key="frame" x="141.5" y="497" width="92" height="30"/>
+                                <rect key="frame" x="141.5" y="537" width="92" height="30"/>
                                 <state key="normal" title="播放网络视频"/>
                                 <connections>
                                     <action selector="swithToPlayOnlineVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="l0q-fR-d0K"/>
@@ -46,13 +46,16 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="crU-Mv-Gct" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2lo-82-oJL"/>
-                            <constraint firstItem="BMO-0m-eWC" firstAttribute="top" secondItem="0zX-LV-gF9" secondAttribute="bottom" constant="25" id="3IW-7d-k1I"/>
+                            <constraint firstItem="BMO-0m-eWC" firstAttribute="top" secondItem="0zX-LV-gF9" secondAttribute="bottom" constant="10" id="3IW-7d-k1I"/>
                             <constraint firstItem="0zX-LV-gF9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5AJ-jj-7hT"/>
-                            <constraint firstItem="0zX-LV-gF9" firstAttribute="top" secondItem="crU-Mv-Gct" secondAttribute="bottom" constant="25" id="AbT-UJ-sJf"/>
+                            <constraint firstItem="0zX-LV-gF9" firstAttribute="top" secondItem="crU-Mv-Gct" secondAttribute="bottom" constant="10" id="AbT-UJ-sJf"/>
                             <constraint firstItem="BMO-0m-eWC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Rge-oi-xg9"/>
-                            <constraint firstItem="AcO-rm-iq3" firstAttribute="top" secondItem="BMO-0m-eWC" secondAttribute="bottom" constant="30" id="iyW-Dw-MtH"/>
+                            <constraint firstItem="AcO-rm-iq3" firstAttribute="top" secondItem="BMO-0m-eWC" secondAttribute="bottom" constant="20" id="iyW-Dw-MtH"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="topBtn" destination="crU-Mv-Gct" id="VXk-2k-dAZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

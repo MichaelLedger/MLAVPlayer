@@ -8,11 +8,15 @@
 
 #import "ViewController.h"
 #import "MLAVPlayer.h"
+#import "UIViewController+SafeArea.h"
+#import <Masonry.h>
 
 @interface ViewController ()
 
-@property (nonatomic, strong) MLAVPlayer *player;
+// 用weak修饰，避免无法释放
+@property (nonatomic, weak) MLAVPlayer *player;
 
+@property (weak, nonatomic) IBOutlet UIButton *topBtn;
 
 @end
 
@@ -23,11 +27,19 @@
     
     MLAVPlayer *player = [MLAVPlayer player];
     [self.view addSubview:player];
+
+    [player mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.mas_equalTo(self.view).mas_offset(self.ml_safeArea.left);
+        make.trailing.mas_equalTo(self.view).mas_offset(self.ml_safeArea.right);
+        make.top.mas_equalTo(self.view).mas_offset(self.ml_safeArea.top);
+        make.bottom.mas_equalTo(self.topBtn.mas_top).mas_offset(-20);
+    }];
     //是否循环播放
     player.loopPlay = YES;
-    player.frame = CGRectMake(0, self.view.safeAreaInsets.top, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height / 2.0);
+//    __weak __typeof(self) weakSelf = self;
     player.backBlock = ^{
         //处理返回按钮点击
+//        weakSelf.player = nil;
     };
     player.scaleBlock = ^(BOOL fullScreen) {
         //处理缩放按钮点击
@@ -51,5 +63,9 @@
     [self.player play];
 }
 
+#pragma mark - 横竖屏切换
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    NSLog(@"===%@====", NSStringFromCGSize(size));
+}
 
 @end

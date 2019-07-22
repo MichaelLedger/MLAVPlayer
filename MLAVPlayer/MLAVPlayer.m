@@ -9,7 +9,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIImage+Extend.h"
-//#import "AVPlayer+SeekSmoothly.h"
+#import "AVPlayer+SeekSmoothly.h"
+#import "NSBundle+MLAVPlayer.h"
 
 #define RGB(r, g, b)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
 #define RGBA(r, g, b, a)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:a]
@@ -42,6 +43,26 @@
 #else
 #define strongify(object) try{} @finally{} __typeof__(object) object = block##_##object;
 #endif
+#endif
+
+/**
+ 定义日志宏*/
+#ifdef DEBUG
+/*
+ __PRETTY_FUNCTION__  非标准宏。这个宏比__FUNCTION__功能更强,  若用g++编译C++程序, __FUNCTION__只能输出类的成员名,不会输出类名;而__PRETTY_FUNCTION__则会以 <return-type>  <class-name>::<member-function-name>(<parameters-list>) 的格式输出成员函数的详悉信息(注: 只会输出parameters-list的形参类型, 而不会输出形参名).若用gcc编译C程序,__PRETTY_FUNCTION__跟__FUNCTION__的功能相同.
+ 
+ __LINE__ 宏在预编译时会替换成当前的行号
+ 
+ __VA_ARGS__ 是一个可变参数的宏，很少人知道这个宏，这个可变参数的宏是新的C99规范中新增的，目前似乎只有gcc支持（VC6.0的编译器不支持）。宏前面加上##的作用在于，当可变参数的个数为0时，这里的##起到把前面多余的","去掉的作用,否则会编译出错
+ */
+//#define DLOG(...) NSLog(__VA_ARGS__);
+#define DLOG(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define DLOG_METHOD NSLog(@"%s",__func__);
+#define DERROR(fmt,...) NSLog((@"error:%s %d " fmt),__FUNCTION__,__LINE__,##__VA_ARGS__);
+#else
+#define DLOG(...) ;
+#define DLOG_METHOD ;
+#define DERROR(fmt,...) ;
 #endif
 
 static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContext;
@@ -90,7 +111,11 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 @implementation MLAVPlayer
 
 + (instancetype)player {
-    NSArray *nibs = [[NSBundle mainBundle] loadNibNamed:@"MLAVPlayer" owner:self options:nil];
+    /*
+     打包静态库时，xib不会被编译成nib，而如果直接在主项目中使用xib，编译的时候就会把xib编程nib。所以需要手动把xib编程nib才能被加载：
+     $ ibtool --errors --warnings --output-format human-readable-text --compile /Users/mtx/Desktop/MLAVPlayer/MLAVPlayer/MLAVPlayer.bundle/MLAVPlayer.nib /Users/mtx/Desktop/MLAVPlayer/MLAVPlayer/MLAVPlayer.bundle/MLAVPlayer.xib
+     */
+    NSArray *nibs = [[NSBundle ml_avplayerBundle] loadNibNamed:@"MLAVPlayer" owner:self options:nil];
     MLAVPlayer *player = nibs.firstObject;
     [player addObservers];
     [UIApplication sharedApplication].idleTimerDisabled=YES;
@@ -98,6 +123,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 }
 
 - (void)dealloc {
+    DLOG_METHOD
     [self pause];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.player removeTimeObserver:self.playbackTimeObserver];
@@ -132,8 +158,10 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     _voiceCtrlView.hidden = YES;
     _lightCtrlView.hidden = YES;
     
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"MLAVPlayer" ofType:@"bundle"];
-    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+//    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"MLAVPlayer" ofType:@"bundle"];
+//    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    
+    NSBundle *bundle = [NSBundle ml_avplayerBundle];
     [_backBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_support_return@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [_lightBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_support_bright@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [_backwardBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_-10s@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
@@ -377,7 +405,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     }
     
     @weakify(self);
-    [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+    [self.player ss_seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         @strongify(self);
         if (!strong_self) return;
         if (finished) {
@@ -395,7 +423,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     CGPoint touchLocation = [sender locationInView:_timeSlider];
     CGFloat value = (_timeSlider.maximumValue - _timeSlider.minimumValue) * (touchLocation.x/_timeSlider.frame.size.width);
     [_timeSlider setValue:value animated:YES];
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
+    [self.player ss_seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
     if (self.player.rate != 1.f) {
         self.playOrPauseBtn.selected = NO;
         [self play];
@@ -407,7 +435,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.player pause];
     Float64 seconds = ([self currentTime] - 10) > 0 ? ([self currentTime] - 10) : 0;
     @weakify(self);
-    [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+    [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
         @strongify(self);
         if (!strong_self) return;
         if (finished) {
@@ -433,7 +461,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         }
     }
     @weakify(self);
-    [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+    [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
         @strongify(self);
         if (!strong_self) return;
         if (finished) {
@@ -503,7 +531,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
             }
         }
         @weakify(self);
-        [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+        [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
             @strongify(self);
             if (!strong_self) return;
             if (finished) {
