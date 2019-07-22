@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
   spec.name         = "MLAVPlayer"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "Encapsulate AVPlayer"
   spec.platform     = :ios, "7.0"
   spec.description  = <<-DESC
