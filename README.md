@@ -70,3 +70,57 @@ pod 'MLAVPlayer', '~> 1.0.1'
 - Source:   https://github.com/MichaelLedger/MLAVPlayer.git
 - Versions: 1.0.1 [master repo]
 ```
+
+更新Release版本（先将.podspec中的版本同步升级: `spec.version = "1.0.2"`）
+```
+$ git tag 1.0.2
+$ git push origin 1.0.2
+remote: Permission to MichaelLedger/MLAVPlayer.git denied to DevaLee.
+fatal: unable to access 'https://github.com/MichaelLedger/MLAVPlayer.git/': The requested URL returned error: 403
+```
+Git clone 成功 git push 却 403错误 解决方案:
+
+1. 在代码的.git/config文件内[remote “origin”]的url的gitlab域名前添加gitlab注册时的“用户名:密码@”
+ 
+2. 这个用户要在对应项目下的角色是Owner或Master才行，如果是Guest、Reporter、Developer，则如下操作后也是不行。
+
+```
+$ git config remote.origin.url https://<username>:<password>@github.com/MichaelLedger/MLAVPlayer.git
+$ git push origin 1.0.2
+Total 0 (delta 0), reused 0 (delta 0)
+To https://github.com/MichaelLedger/MLAVPlayer.git
+* [new tag]         1.0.2 -> 1.0.2
+```
+标签提交完毕后即可上传升级后的 .podsepc 文件到 git 的 cocoapods/Specs 公开仓库
+```
+$ pod trunk push MLAVPlayer.podspec
+Updating spec repo `master`
+
+CocoaPods 1.7.5 is available.
+To update use: `gem install cocoapods`
+
+For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.7.5
+
+Validating podspec
+-> MLAVPlayer (1.0.2)
+- NOTE  | xcodebuild:  note: Using new build system
+- NOTE  | [iOS] xcodebuild:  note: Planning build
+- NOTE  | [iOS] xcodebuild:  note: Constructing build description
+
+Updating spec repo `master`
+
+CocoaPods 1.7.5 is available.
+To update use: `gem install cocoapods`
+
+For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.7.5
+
+
+--------------------------------------------------------------------------------
+🎉  Congrats
+
+🚀  MLAVPlayer (1.0.2) successfully published
+📅  July 22nd, 04:52
+🌎  https://cocoapods.org/pods/MLAVPlayer
+👍  Tell your friends!
+--------------------------------------------------------------------------------
+```
