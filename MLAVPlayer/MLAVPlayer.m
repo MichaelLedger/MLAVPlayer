@@ -9,12 +9,40 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIImage+Extend.h"
-#import "AVPlayer+SeekSmoothly.h"
+//#import "AVPlayer+SeekSmoothly.h"
 
 #define RGB(r, g, b)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
 #define RGBA(r, g, b, a)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:a]
 #define RGBHEX(hex) [UIColor colorWithRed:((float)((hex & 0xFF0000) >> 16)) / 255.0 green:((float)((hex & 0xFF00) >> 8)) / 255.0 blue:((float)(hex & 0xFF)) / 255.0 alpha:1]
 #define RGBHEXA(hex,a) [UIColor colorWithRed:((float)(((hex) & 0xFF0000) >> 16))/255.0 green:((float)(((hex) & 0xFF00)>>8))/255.0 blue: ((float)((hex) & 0xFF))/255.0 alpha:(a)]
+
+#ifndef weakify
+#if __has_feature(objc_arc)
+#define weakify(object) autoreleasepool{} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) autoreleasepool{} __block __typeof__(object) block##_##object = object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define weakify(object) try{} @finally{} {} __weak __typeof__(object) weak##_##object = object;
+#else
+#define weakify(object) try{} @finally{} {} __block __typeof__(object) block##_##object = object;
+#endif
+#endif
+
+#ifndef strongify
+#if __has_feature(objc_arc)
+#define strongify(object) autoreleasepool{} __strong __typeof__(object) strong##_##object = weak##_##object;
+#else
+#define strongify(object) autoreleasepool{} __typeof__(object) object = block##_##object;
+#endif
+#else
+#if __has_feature(objc_arc)
+#define strongify(object) try{} @finally{} __strong __typeof__(object) strong##_##object = weak##_##object;
+#else
+#define strongify(object) try{} @finally{} __typeof__(object) object = block##_##object;
+#endif
+#endif
 
 static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContext;
 
@@ -323,9 +351,11 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
 #pragma mark - 监听播放状态
 - (void)initTimer {
-    __weak __typeof(self) weakSelf = self;
+    @weakify(self);
     self.playbackTimeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1, NSEC_PER_SEC) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
-        [weakSelf syncTimeSlider];
+        @strongify(self);
+        if (!strong_self) return;
+        [strong_self syncTimeSlider];
     }];
 }
 
@@ -346,12 +376,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         self.playerDidToEnd();
     }
     
-    [self.player ss_seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+    @weakify(self);
+    [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+        @strongify(self);
+        if (!strong_self) return;
         if (finished) {
-            if(!self.loopPlay){
-                [self pause];
+            if(!strong_self.loopPlay){
+                [strong_self pause];
             } else {
-                [self play];
+                [strong_self play];
             }
         }
     }];
@@ -362,8 +395,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     CGPoint touchLocation = [sender locationInView:_timeSlider];
     CGFloat value = (_timeSlider.maximumValue - _timeSlider.minimumValue) * (touchLocation.x/_timeSlider.frame.size.width);
     [_timeSlider setValue:value animated:YES];
-    
-    [self.player ss_seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
+    [self.player seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
     if (self.player.rate != 1.f) {
         self.playOrPauseBtn.selected = NO;
         [self play];
@@ -374,9 +406,12 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 - (IBAction)backwardBtnClicked:(UIButton *)sender {
     [self.player pause];
     Float64 seconds = ([self currentTime] - 10) > 0 ? ([self currentTime] - 10) : 0;
+    @weakify(self);
     [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+        @strongify(self);
+        if (!strong_self) return;
         if (finished) {
-            [self play];
+            [strong_self play];
         }
     }];
 }
@@ -397,10 +432,13 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
             self.playerDidToEnd();
         }
     }
-    [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+    @weakify(self);
+    [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+        @strongify(self);
+        if (!strong_self) return;
         if (finished) {
-            if (self.loopPlay || ([self currentTime] > 0)) {
-                [self play];
+            if (strong_self.loopPlay || ([strong_self currentTime] > 0)) {
+                [strong_self play];
             }
         }
     }];
@@ -464,13 +502,16 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 self.playerDidToEnd();
             }
         }
-        [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+        @weakify(self);
+        [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+            @strongify(self);
+            if (!strong_self) return;
             if (finished) {
-                if (self.loopPlay || ([self currentTime] > 0)) {
-                    [self play];
+                if (strong_self.loopPlay || ([strong_self currentTime] > 0)) {
+                    [strong_self play];
                 }
             }
-            self.isDragingSlider = NO;
+            strong_self.isDragingSlider = NO;
         }];
     } else if (sender == self.lightSlider) {
         [UIScreen mainScreen].brightness = self.lightSlider.value;

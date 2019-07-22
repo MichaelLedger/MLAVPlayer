@@ -12,14 +12,10 @@
 
 + (instancetype)ml_avplayerBundle {
     static NSBundle *avplayerBundle = nil;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        avplayerBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MLAVPlayer class]] pathForResource:@"MLAVPlayer" ofType:@"bundle"]];
-//    });
-    if (avplayerBundle == nil) {
-        NSString *path = [[NSBundle bundleForClass:[MLAVPlayer class]] pathForResource:@"MLAVPlayer" ofType:@"bundle"];
-        avplayerBundle = [NSBundle bundleWithPath:path];
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        avplayerBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MLAVPlayer class]] pathForResource:@"MLAVPlayer" ofType:@"bundle"]];
+    });
     return avplayerBundle;
 }
 

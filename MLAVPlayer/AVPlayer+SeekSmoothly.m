@@ -61,7 +61,7 @@
              }
          } else {
              // targetTime has changed, seek again
-             [self trySeekToTargetTimeWithToleranceBefore:toleranceBefore toleranceAfter:toleranceAfter completionHandler:completionHandler];
+             [strongSelf trySeekToTargetTimeWithToleranceBefore:toleranceBefore toleranceAfter:toleranceAfter completionHandler:completionHandler];
          }
      }];
 }
