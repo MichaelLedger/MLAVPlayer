@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -67,8 +68,20 @@
                             </connections>
                         </button>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="u0f-Mt-ar7">
-                            <rect key="frame" x="118" y="5" width="122" height="31"/>
+                            <rect key="frame" x="118" y="10" width="122" height="11"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="10" id="KCP-5Z-sBr"/>
+                            </constraints>
                         </slider>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--:-- / --:--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v6z-MU-S2r">
+                            <rect key="frame" x="174" y="20" width="64" height="20"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="20" id="LJc-EB-4Wd"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BV4-7s-t2Q">
                             <rect key="frame" x="248" y="7.5" width="25" height="25"/>
                             <constraints>
@@ -90,7 +103,9 @@
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="v6z-MU-S2r" firstAttribute="trailing" secondItem="u0f-Mt-ar7" secondAttribute="trailing" id="0Gl-gs-AUL"/>
                         <constraint firstItem="Lpu-1E-ntX" firstAttribute="leading" secondItem="BV4-7s-t2Q" secondAttribute="trailing" constant="10" id="2wH-e8-gZy"/>
+                        <constraint firstItem="v6z-MU-S2r" firstAttribute="top" secondItem="u0f-Mt-ar7" secondAttribute="bottom" id="68x-rf-QvP"/>
                         <constraint firstAttribute="height" constant="40" id="6Kj-uq-ZF0"/>
                         <constraint firstItem="gAB-Zf-Oze" firstAttribute="leading" secondItem="9xD-PG-sV4" secondAttribute="trailing" constant="10" id="8OF-Fq-1y1"/>
                         <constraint firstItem="BV4-7s-t2Q" firstAttribute="centerY" secondItem="bQv-5T-3v3" secondAttribute="centerY" id="9Pc-aw-aOb"/>
@@ -100,10 +115,10 @@
                         <constraint firstItem="CWg-Vf-aCA" firstAttribute="leading" secondItem="gAB-Zf-Oze" secondAttribute="trailing" constant="10" id="cRu-Bz-LVo"/>
                         <constraint firstItem="CWg-Vf-aCA" firstAttribute="centerY" secondItem="bQv-5T-3v3" secondAttribute="centerY" id="cqo-Be-sdY"/>
                         <constraint firstItem="BV4-7s-t2Q" firstAttribute="width" secondItem="BV4-7s-t2Q" secondAttribute="height" multiplier="1:1" id="dWL-Yx-oxd"/>
-                        <constraint firstItem="u0f-Mt-ar7" firstAttribute="centerY" secondItem="bQv-5T-3v3" secondAttribute="centerY" id="huY-uf-Tlq"/>
                         <constraint firstItem="gAB-Zf-Oze" firstAttribute="width" secondItem="gAB-Zf-Oze" secondAttribute="height" multiplier="1:1" id="iMf-jQ-qJH"/>
                         <constraint firstItem="gAB-Zf-Oze" firstAttribute="centerY" secondItem="bQv-5T-3v3" secondAttribute="centerY" id="lOs-9K-IVs"/>
                         <constraint firstItem="Lpu-1E-ntX" firstAttribute="width" secondItem="Lpu-1E-ntX" secondAttribute="height" multiplier="1:1" id="mf9-6D-pW3"/>
+                        <constraint firstItem="u0f-Mt-ar7" firstAttribute="top" secondItem="bQv-5T-3v3" secondAttribute="top" constant="10" id="o6S-O7-1WD"/>
                         <constraint firstItem="CWg-Vf-aCA" firstAttribute="width" secondItem="CWg-Vf-aCA" secondAttribute="height" multiplier="1:1" id="oLT-5e-gT6"/>
                         <constraint firstItem="9xD-PG-sV4" firstAttribute="leading" secondItem="bQv-5T-3v3" secondAttribute="leading" constant="15" id="tBi-QN-fh3"/>
                         <constraint firstItem="Lpu-1E-ntX" firstAttribute="centerY" secondItem="bQv-5T-3v3" secondAttribute="centerY" id="v50-ZQ-Mk4"/>
@@ -194,7 +209,6 @@
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="bQv-5T-3v3" secondAttribute="bottom" id="7wX-od-9hO"/>
@@ -222,6 +236,7 @@
                 <outlet property="lightSlider" destination="orQ-wh-9Om" id="FAu-2L-Ppb"/>
                 <outlet property="playOrPauseBtn" destination="gAB-Zf-Oze" id="rRg-HQ-aAV"/>
                 <outlet property="scaleBtn" destination="Lpu-1E-ntX" id="r8U-9D-VT9"/>
+                <outlet property="timeLabel" destination="v6z-MU-S2r" id="6Ii-w5-48e"/>
                 <outlet property="timeSlider" destination="u0f-Mt-ar7" id="sI3-V9-Yfk"/>
                 <outlet property="toolBar" destination="bQv-5T-3v3" id="Sls-JB-c3I"/>
                 <outlet property="voiceBtn" destination="BV4-7s-t2Q" id="bRE-we-iqM"/>

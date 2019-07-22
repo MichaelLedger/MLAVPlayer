@@ -30,6 +30,11 @@ typedef void(^ScaleBtnClickBlock)(BOOL fullScreen);
  */
 @property (copy, nonatomic) ScaleBtnClickBlock scaleBlock;
 
+/**
+ 播放结束回调
+ */
+@property (nonatomic, copy) void (^playerDidToEnd)(void);
+
 + (instancetype)player;
 
 /**

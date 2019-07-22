@@ -16,9 +16,11 @@
 		AA75B2B722DEB7C6000CC8FB /* MLAVPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2B122DEB7C6000CC8FB /* MLAVPlayer.bundle */; };
 		AA75B2B822DEB7C6000CC8FB /* UIImage+Extend.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */; };
 		AA75B2B922DEB7C6000CC8FB /* MLAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */; };
-		AA75B2BA22DEB7C6000CC8FB /* MLAVPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2B622DEB7C6000CC8FB /* MLAVPlayer.xib */; };
 		AA75B2BD22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2BB22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 */; };
 		AA75B2BE22DEB7D1000CC8FB /* trailer.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = AA75B2BC22DEB7D1000CC8FB /* trailer.mp4 */; };
+		AAE78F2E22E5A6F60065EC81 /* MLAVPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */; };
+		AAE78F3122E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */; };
+		AAF682E022E30A5E0087046B /* NSBundle+MLAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,9 +39,13 @@
 		AA75B2B322DEB7C6000CC8FB /* MLAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLAVPlayer.h; sourceTree = "<group>"; };
 		AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extend.m"; sourceTree = "<group>"; };
 		AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLAVPlayer.m; sourceTree = "<group>"; };
-		AA75B2B622DEB7C6000CC8FB /* MLAVPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLAVPlayer.xib; sourceTree = "<group>"; };
 		AA75B2BB22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bbc20190709_21306935GX.mp3; path = ../../bbc20190709_21306935GX.mp3; sourceTree = "<group>"; };
 		AA75B2BC22DEB7D1000CC8FB /* trailer.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = trailer.mp4; path = ../../trailer.mp4; sourceTree = "<group>"; };
+		AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MLAVPlayer.xib; sourceTree = "<group>"; };
+		AAE78F2F22E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVPlayer+SeekSmoothly.h"; sourceTree = "<group>"; };
+		AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVPlayer+SeekSmoothly.m"; sourceTree = "<group>"; };
+		AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+MLAVPlayer.m"; sourceTree = "<group>"; };
+		AAF682DF22E30A5D0087046B /* NSBundle+MLAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+MLAVPlayer.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,12 +97,16 @@
 		AA75B2B022DEB7C6000CC8FB /* MLAVPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				AA75B2B322DEB7C6000CC8FB /* MLAVPlayer.h */,
+				AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */,
+				AAE78F2D22E5A6F60065EC81 /* MLAVPlayer.xib */,
+				AAF682DF22E30A5D0087046B /* NSBundle+MLAVPlayer.h */,
+				AAF682DE22E30A5D0087046B /* NSBundle+MLAVPlayer.m */,
 				AA75B2B122DEB7C6000CC8FB /* MLAVPlayer.bundle */,
 				AA75B2B222DEB7C6000CC8FB /* UIImage+Extend.h */,
 				AA75B2B422DEB7C6000CC8FB /* UIImage+Extend.m */,
-				AA75B2B322DEB7C6000CC8FB /* MLAVPlayer.h */,
-				AA75B2B522DEB7C6000CC8FB /* MLAVPlayer.m */,
-				AA75B2B622DEB7C6000CC8FB /* MLAVPlayer.xib */,
+				AAE78F2F22E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.h */,
+				AAE78F3022E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m */,
 			);
 			name = MLAVPlayer;
 			path = ../../MLAVPlayer;
@@ -159,11 +169,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA75B2BA22DEB7C6000CC8FB /* MLAVPlayer.xib in Resources */,
 				AA75B2A722DEB7A2000CC8FB /* LaunchScreen.storyboard in Resources */,
 				AA75B2BD22DEB7D1000CC8FB /* bbc20190709_21306935GX.mp3 in Resources */,
 				AA75B2A422DEB7A2000CC8FB /* Assets.xcassets in Resources */,
 				AA75B2BE22DEB7D1000CC8FB /* trailer.mp4 in Resources */,
+				AAE78F2E22E5A6F60065EC81 /* MLAVPlayer.xib in Resources */,
 				AA75B2B722DEB7C6000CC8FB /* MLAVPlayer.bundle in Resources */,
 				AA75B2A222DEB7A1000CC8FB /* Main.storyboard in Resources */,
 			);
@@ -178,7 +188,9 @@
 			files = (
 				AA75B29F22DEB7A1000CC8FB /* ViewController.m in Sources */,
 				AA75B2AA22DEB7A2000CC8FB /* main.m in Sources */,
+				AAE78F3122E5AB7F0065EC81 /* AVPlayer+SeekSmoothly.m in Sources */,
 				AA75B29C22DEB7A1000CC8FB /* AppDelegate.m in Sources */,
+				AAF682E022E30A5E0087046B /* NSBundle+MLAVPlayer.m in Sources */,
 				AA75B2B922DEB7C6000CC8FB /* MLAVPlayer.m in Sources */,
 				AA75B2B822DEB7C6000CC8FB /* UIImage+Extend.m in Sources */,
 			);
@@ -325,6 +337,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5U5763E89G;
 				INFOPLIST_FILE = "iOS Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -342,6 +355,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5U5763E89G;
 				INFOPLIST_FILE = "iOS Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

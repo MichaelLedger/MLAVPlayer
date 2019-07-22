@@ -9,6 +9,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "UIImage+Extend.h"
+#import "AVPlayer+SeekSmoothly.h"
 
 #define RGB(r, g, b)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:1.f]
 #define RGBA(r, g, b, a)    [UIColor colorWithRed:(r)/255.f green:(g)/255.f blue:(b)/255.f alpha:a]
@@ -52,6 +53,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 //视频进度条的单击手势
 @property (nonatomic, strong) UITapGestureRecognizer *progressTap;
 // 音频播放器
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+//格式化时间（懒加载防止多次重复初始化）
+@property (nonatomic,strong) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -67,13 +71,19 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
 - (void)dealloc {
     [self pause];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.player removeTimeObserver:self.playbackTimeObserver];
     [self.player removeObserver:self forKeyPath:@"timeControlStatus"];
+    [_currentItem removeObserver:self forKeyPath:@"status"];
+    [_currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+    [_currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+    [_currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+    [_currentItem removeObserver:self forKeyPath:@"duration"];
+    [_currentItem removeObserver:self forKeyPath:@"presentationSize"];
+    _currentItem = nil;
     self.player = nil;
     self.playerLayer = nil;
-    self.currentItem = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [UIApplication sharedApplication].idleTimerDisabled=NO;
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 #pragma mark - Public Method
@@ -91,8 +101,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    self.backgroundColor = [UIColor blackColor];
-    
     _voiceCtrlView.hidden = YES;
     _lightCtrlView.hidden = YES;
     
@@ -105,15 +113,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [_playOrPauseBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"player_ctrl_icon_pause@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
     [_forwardBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_+10s@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [_voiceBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_volume@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    [_scaleBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_Full screen@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-    [_scaleBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_Exit full screen@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
+    [_scaleBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_full_screen@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+    [_scaleBtn setImage:[[UIImage imageWithContentsOfFile:[bundle pathForResource:@"icon_video_exit_full_screen@2x" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateSelected];
     
     [_timeSlider setMinimumTrackTintColor:RGBHEX(0xF5A623)];
     [_timeSlider setMaximumTrackTintColor:RGBHEXA(0xFFFFFF, 0.5)];
-    [_timeSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xF5A623)] scaleToSize:CGSizeMake(8, 8)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
+    [_timeSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xF5A623)] scaleToSize:CGSizeMake(6, 6)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
     _timeSlider.value = 0;
     _timeSlider.minimumValue = 0.0;
-    _timeSlider.maximumValue = 1.0;
+    _timeSlider.maximumValue = 0.0;
     //监听滑块滑动进行事件
     [_timeSlider addTarget:self action:@selector(sliderChanging:) forControlEvents:UIControlEventValueChanged];
     //监听滑块滑动完成事件
@@ -130,7 +138,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     [_lightSlider setMinimumTrackTintColor:RGBHEX(0xFFFFFF)];
     [_lightSlider setMaximumTrackTintColor:RGBHEXA(0xFFFFFF, 0.2)];
-    [_lightSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xFFFFFF)] scaleToSize:CGSizeMake(8, 8)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
+    [_lightSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xFFFFFF)] scaleToSize:CGSizeMake(6, 6)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
     _lightSlider.value = [UIScreen mainScreen].brightness;
     _lightSlider.minimumValue = 0.0;
     _lightSlider.maximumValue = 1.0;
@@ -143,7 +151,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     [_voiceSlider setMinimumTrackTintColor:RGBHEX(0xFFFFFF)];
     [_voiceSlider setMaximumTrackTintColor:RGBHEXA(0xFFFFFF, 0.2)];
-    [_voiceSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xFFFFFF)] scaleToSize:CGSizeMake(8, 8)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
+    [_voiceSlider setThumbImage:[[[UIImage imageWithColor:RGBHEX(0xFFFFFF)] scaleToSize:CGSizeMake(6, 6)] imageToHeadViewWithParam:0] forState:UIControlStateNormal];
     _voiceSlider.value = 0;
     _voiceSlider.minimumValue = 0.0;
     _voiceSlider.maximumValue = 1.0;
@@ -169,7 +177,33 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 #pragma mark - Private Methods
 #pragma mark - Setter
 - (void)setCurrentItem:(AVPlayerItem *)currentItem {
+    if (_currentItem == currentItem) {
+        return;
+    }
+    
+    if (_currentItem) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:_currentItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:_currentItem];
+        
+        [_currentItem removeObserver:self forKeyPath:@"status"];
+        [_currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+        [_currentItem removeObserver:self forKeyPath:@"playbackBufferEmpty"];
+        [_currentItem removeObserver:self forKeyPath:@"playbackLikelyToKeepUp"];
+        [_currentItem removeObserver:self forKeyPath:@"duration"];
+        [_currentItem removeObserver:self forKeyPath:@"presentationSize"];
+        _currentItem = nil;
+    }
+    
     _currentItem = currentItem;
+    
+    // 添加视频播放结束通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationDidEnterBackgroundNotification object:_currentItem];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(play) name:UIApplicationWillEnterForegroundNotification object:_currentItem];
+    
     [_currentItem addObserver:self
                    forKeyPath:@"status"
                       options:NSKeyValueObservingOptionNew
@@ -184,26 +218,29 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [_currentItem addObserver:self forKeyPath:@"duration" options:NSKeyValueObservingOptionNew context:PlayViewStatusObservationContext];
     
     [_currentItem addObserver:self forKeyPath:@"presentationSize" options:NSKeyValueObservingOptionNew context:PlayViewStatusObservationContext];
-    
-    // 添加视频播放结束通知
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
 }
 
 - (void)setVideoURL:(NSURL *)videoURL {
     _videoURL = videoURL;
+    //音频和视频背景色区分
+    if ([videoURL.absoluteString hasSuffix:@".mp3"] || [videoURL.absoluteString hasSuffix:@".wma"] || [videoURL.absoluteString hasSuffix:@".rm"] || [videoURL.absoluteString hasSuffix:@".wav"] || [videoURL.absoluteString hasSuffix:@".midi"] || [videoURL.absoluteString hasSuffix:@".ape"] || [videoURL.absoluteString hasSuffix:@".flac"]) {
+        self.backgroundColor = [UIColor whiteColor];
+    } else {
+        self.backgroundColor = [UIColor blackColor];
+    }
     if (self.currentItem) {//已初始化
         AVURLAsset *urlAsset = (AVURLAsset *)self.currentItem.asset;
         if (urlAsset.URL != self.videoURL) {//播放地址更改
             self.currentItem = [AVPlayerItem playerItemWithAsset:[AVURLAsset assetWithURL:self.videoURL]];
             [self.player replaceCurrentItemWithPlayerItem:self.currentItem];
             _timeSlider.value = 0;
+            _isDragingSlider = NO;
             [self pause];
         }
     } else {
         self.currentItem = [AVPlayerItem playerItemWithAsset:[AVURLAsset assetWithURL:self.videoURL]];
         self.player = [AVPlayer playerWithPlayerItem:self.currentItem];
         self.player.actionAtItemEnd = self.loopPlay ? AVPlayerActionAtItemEndNone : AVPlayerActionAtItemEndPause;
-        self.currentItem = [AVPlayerItem playerItemWithAsset:[AVURLAsset assetWithURL:self.videoURL]];
         self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
         self.playerLayer.frame = self.layer.bounds;
         self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
@@ -230,6 +267,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 case AVPlayerItemStatusReadyToPlay:
                 {
                     self.timeSlider.maximumValue = [self duration];
+                    self.timeLabel.text = [self currentTimeStamp];
                 }
                     break;
                     
@@ -255,14 +293,14 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         }
     }else{
         if ([keyPath isEqualToString:@"timeControlStatus"]){
-            NSInteger playStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
-            if (playStatus == 1) {
-                NSLog(@"准备");
-            } else if (playStatus == 2){
-                NSLog(@"播放了");
-            } else {
-                NSLog(@"暂停了");
-            }
+           // NSInteger playStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+//            if (playStatus == 1) {
+//                NSLog(@"准备");
+//            } else if (playStatus == 2){
+//                NSLog(@"播放了");
+//            } else {
+//                NSLog(@"暂停了");
+//            }
         }
     }
 }
@@ -298,11 +336,17 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         return;
     }
     _timeSlider.value = [self currentTime];
+    self.timeLabel.text = [self currentTimeStamp];
 }
 
 #pragma mark - 播放完成
 - (void)moviePlayDidEnd:(NSNotification *)notification {
-    [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+    // 新增扫读播放完毕回调 V5.35.0 by MT.X
+    if (self.playerDidToEnd) {
+        self.playerDidToEnd();
+    }
+    
+    [self.player ss_seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         if (finished) {
             if(!self.loopPlay){
                 [self pause];
@@ -319,7 +363,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     CGFloat value = (_timeSlider.maximumValue - _timeSlider.minimumValue) * (touchLocation.x/_timeSlider.frame.size.width);
     [_timeSlider setValue:value animated:YES];
     
-    [self.player seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
+    [self.player ss_seekToTime:CMTimeMakeWithSeconds(self.timeSlider.value, self.currentItem.currentTime.timescale)];
     if (self.player.rate != 1.f) {
         self.playOrPauseBtn.selected = NO;
         [self play];
@@ -331,7 +375,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.player pause];
     Float64 seconds = ([self currentTime] - 10) > 0 ? ([self currentTime] - 10) : 0;
     [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
-        [self play];
+        if (finished) {
+            [self play];
+        }
     }];
 }
 - (IBAction)playOrPauseBtnClicked:(UIButton *)sender {
@@ -345,8 +391,18 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 - (IBAction)forwardBtnClicked:(UIButton *)sender {
     [self.player pause];
     Float64 seconds = ([self currentTime] + 10) < [self duration] ? ([self currentTime] + 10) : [self duration];
-    [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
-        [self play];
+    // 新增扫读播放完毕回调 V5.35.0 by MT.X
+    if (seconds == [self duration]) {
+        if (self.playerDidToEnd) {
+            self.playerDidToEnd();
+        }
+    }
+    [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+        if (finished) {
+            if (self.loopPlay || ([self currentTime] > 0)) {
+                [self play];
+            }
+        }
     }];
 }
 - (IBAction)voiceBtnClicked:(UIButton *)sender {
@@ -392,12 +448,29 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 - (void)sliderChanging:(UISlider *)sender {
     self.isDragingSlider = YES;
     if (sender == self.timeSlider) {
+        self.timeLabel.text = [NSString stringWithFormat:@"%@ / %@", [self convertTime:sender.value], [self convertTime:sender.maximumValue]];
         [self.player pause];
+    }
+}
+
+- (void)sliderChanged:(UISlider *)sender {
+    if (sender == self.timeSlider) {
         Float64 seconds = self.timeSlider.value;
         if (seconds < 0) seconds = 0;
-        if (seconds > [self duration]) seconds = [self duration];
-        [self.player seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
-            [self play];
+        if (seconds >= [self duration]) seconds = [self duration];
+        // 新增扫读播放完毕回调 V5.35.0 by MT.X
+        if (seconds == [self duration]) {
+            if (self.playerDidToEnd) {
+                self.playerDidToEnd();
+            }
+        }
+        [self.player ss_seekToTime:CMTimeMakeWithSeconds(seconds, self.currentItem.currentTime.timescale) completionHandler:^(BOOL finished) {
+            if (finished) {
+                if (self.loopPlay || ([self currentTime] > 0)) {
+                    [self play];
+                }
+            }
+            self.isDragingSlider = NO;
         }];
     } else if (sender == self.lightSlider) {
         [UIScreen mainScreen].brightness = self.lightSlider.value;
@@ -406,15 +479,11 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     }
 }
 
-- (void)sliderChanged:(UISlider *)sender {
-    self.isDragingSlider = NO;
-}
-
 //获取视频长度
 - (double)duration{
     AVPlayerItem *playerItem = self.player.currentItem;
     if (playerItem.status == AVPlayerItemStatusReadyToPlay){
-        return CMTimeGetSeconds([[playerItem asset] duration]);
+        return CMTimeGetSeconds([[playerItem asset] duration]) < 0.f ? 0.f : CMTimeGetSeconds([[playerItem asset] duration]);
     }else{
         return 0.f;
     }
@@ -422,10 +491,38 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 //获取视频当前播放的时间
 - (double)currentTime{
     if (self.player) {
-        return CMTimeGetSeconds([self.player currentTime]);
+        return CMTimeGetSeconds([self.player currentTime]) < 0.f ? 0.f : CMTimeGetSeconds([self.player currentTime]);
     }else{
         return 0.0;
     }
+}
+
+//当前播放进度时间戳
+- (NSString *)currentTimeStamp {
+    AVPlayerItem *playerItem = self.player.currentItem;
+    if (playerItem.status == AVPlayerItemStatusReadyToPlay){
+        return [NSString stringWithFormat:@"%@ / %@", [self convertTime:[self currentTime]], [self convertTime:[self duration]]];
+    }else{
+        return @"--:-- / --:--";
+    }
+}
+
+- (NSString *)convertTime:(float)second{
+    NSDate *d = [NSDate dateWithTimeIntervalSince1970:second];
+    if (second/3600 >= 1) {
+        [[self dateFormatter] setDateFormat:@"HH:mm:ss"];
+    } else {
+        [[self dateFormatter] setDateFormat:@"mm:ss"];
+    }
+    return [[self dateFormatter] stringFromDate:d];
+}
+
+- (NSDateFormatter *)dateFormatter {
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    }
+    return _dateFormatter;
 }
 
 - (void)layoutSubviews {
