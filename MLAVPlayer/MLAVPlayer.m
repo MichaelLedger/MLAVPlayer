@@ -239,8 +239,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     if (_currentItem) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:_currentItem];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:_currentItem];
         
         [_currentItem removeObserver:self forKeyPath:@"status"];
         [_currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
@@ -255,10 +253,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     // 添加视频播放结束通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moviePlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:_currentItem];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationDidEnterBackgroundNotification object:_currentItem];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(play) name:UIApplicationWillEnterForegroundNotification object:_currentItem];
     
     [_currentItem addObserver:self
                    forKeyPath:@"status"
@@ -365,6 +359,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 - (void)addObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustLightSliderValue:) name:UIScreenBrightnessDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustVoiceSilderValue:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(play) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)adjustLightSliderValue:(NSNotification *)noti {
