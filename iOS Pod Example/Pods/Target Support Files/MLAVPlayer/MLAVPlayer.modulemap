@@ -1,0 +1,6 @@
+framework module MLAVPlayer {
+  umbrella header "MLAVPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}

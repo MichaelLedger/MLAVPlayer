@@ -1,0 +1,20 @@
+PODS:
+  - Masonry (1.1.0)
+  - MLAVPlayer (1.0.3)
+
+DEPENDENCIES:
+  - Masonry
+  - MLAVPlayer (~> 1.0.3)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Masonry
+    - MLAVPlayer
+
+SPEC CHECKSUMS:
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MLAVPlayer: 838962ab81000c5ef0d69b6726c1c4f1c3516756
+
+PODFILE CHECKSUM: fc52490200db2f2eed54b90843a3f99499eda407
+
+COCOAPODS: 1.7.4
