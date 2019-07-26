@@ -24,7 +24,9 @@ player.scaleBlock = ^(BOOL fullScreen) {
 [player play];
 ```
 
-一个标准的podspec文件可以通过 `$ pod spec create` 命令生成
+一个标准的podspec文件可以通过 `$ pod spec create <projectName>` 命令生成
+
+检查podspec: `pod spec lint <projectName>.podspec`
 
 *注册 cocoapods trunk*
 ```
